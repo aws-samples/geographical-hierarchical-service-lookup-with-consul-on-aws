@@ -1,0 +1,85 @@
+server:
+  port: 9090
+
+spring:
+  config:
+    activate:
+      on-profile: trading
+  application:
+    name: trading
+  cloud:
+    config:
+      enabled: false
+    consul:
+      config:
+        import-check.enabled: false
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: id:${spring.application.name}:${server.port}
+        service-name: ${spring.application.name}
+        register: true
+        register-health-check: true
+        deregister: true
+        query-passing: true
+  jackson:
+    serialization:
+      indent-output: true
+
+---
+server:
+  port: 9090
+
+spring:
+  config:
+    activate:
+      on-profile: pricer
+  application:
+    name: pricer
+  cloud:
+    config:
+      enabled: false
+    consul:
+      config:
+        import-check.enabled: false
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: id:${spring.application.name}:${server.port}
+        service-name: ${spring.application.name}
+        register: true
+        register-health-check: true
+        deregister: true
+        query-passing: true
+  jackson:
+    serialization:
+      indent-output: true
+
+---
+server:
+  port: 9090
+
+spring:
+  config:
+    activate:
+      on-profile: static-data
+  application:
+    name: static-data
+  cloud:
+    config:
+      enabled: false
+    consul:
+      config:
+        import-check.enabled: false
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: id:${spring.application.name}:${server.port}
+        service-name: ${spring.application.name}
+        register: true
+        register-health-check: true
+        deregister: true
+        query-passing: true
+  jackson:
+    serialization:
+      indent-output: true
