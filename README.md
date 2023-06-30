@@ -10,8 +10,8 @@
     - [Consul cluster / Consul Agent (running in server mode)](#consul-cluster--consul-agent-running-in-server-mode)
     - [Sample SpringBoot Web-App / Consul Agent (running in client mode)](#sample-springboot-web-app--consul-agent-running-in-client-mode)
     - [Service Discovery Library](#service-discovery-library)
-  - [Build \& Run the Sample App (dev / local setup) for local testing](#build--run-the-sample-app-dev--local-setup-for-local-testing)
-  - [Prod Setup](#prod-setup)
+  - [Build \& Run the Sample App (dev / local setup) for local testing - Optional](#build--run-the-sample-app-dev--local-setup-for-local-testing---optional)
+  - [Prod Setup - Optional](#prod-setup---optional)
     - [Prerequisites (dev / local setup)](#prerequisites-dev--local-setup)
     - [Build the Sample App (dev / local setup)](#build-the-sample-app-dev--local-setup)
     - [Run the Sample App (dev / local setup)](#run-the-sample-app-dev--local-setup)
@@ -24,6 +24,8 @@
     - [6. Infrastructure post-deployment steps](#6-infrastructure-post-deployment-steps)
   - [Test your deployment](#test-your-deployment)
   - [Build your own](#build-your-own)
+- [Security](#security)
+- [License](#license)
 
 ### Introduction
 
@@ -57,13 +59,17 @@ In order to execute this deployment, please ensure you have installed the follow
 
 This PoC is made of two datacenters represented by two VPCs, and interconnected by a Transit Gateway for networking purposes.
 
-![AWS infrastructure](./images/infra.png)
+![AWS infrastructure](./images/InfradiagramBlog.png)
 
 #### Consul cluster / Consul Agent (running in server mode)
 
 In each datacenter (VPC) there is a Concul cluster deployed which consists of 3 EC2 instances, each EC2 instance is running Consul in server mode. The EC2 instances are part of an auto-scaling group for resilience purposes.
 
-![Consul setup and agent registration workflow](./images/consul.png)
+![Consul setup and agent registration workflow](./images/FlowdiagramBlog.png)
+
+1. The Consul agent deployed on the instance registers to the local Consul cluster, and the service registers to its Consul agent.
+2. The Trading service looks up for available Pricer services via API calls.
+3. The Consul agent returns the list of available Pricer services, so that the Trading service can query a Pricer service.
 
 #### Sample SpringBoot Web-App / Consul Agent (running in client mode)
 
@@ -106,7 +112,7 @@ For instance if a service called 'trading-engine' with metadata[customer: ACME, 
     - Return CUSTOMER_MATCH_LIST
     - Else Return SHARED_CUSTOMER_LIST
 
-### Build & Run the Sample App (dev / local setup) for local testing
+### Build & Run the Sample App (dev / local setup) for local testing - Optional
 
 The sample app has been developed using the below libraries
 
@@ -114,7 +120,7 @@ The sample app has been developed using the below libraries
 - Spring Boot 2.7.3
 - Maven 3.8.6
 
-### Prod Setup
+### Prod Setup - Optional
 
 To deploy the sample app to production, copy the jar named `efx-0.0.1-SNAPSHOT.jar`,which was shared as part of the assets, to this directory `~/deployment/`. When terraform runs it will pick up the jar and copy it over to an S3 folder. From there on the jar starts up by the user-data script.
 
@@ -189,7 +195,7 @@ The output will like this:
 ```
 ==> Builds finished. The artifacts of successful builds are:
 --> amazon-ebs.ubuntu20-ami: AMIs were created:
-ap-southeast-1: ami-xxxxxxxxxxxxxxxxxx
+ap-southeast-1: ami-12345678910
 ```
 
 You can also find the newly built AMI into your AWS account.
@@ -209,7 +215,7 @@ The output will like this:
 ```
 ==> Builds finished. The artifacts of successful builds are:
 --> amazon-ebs.ubuntu20-ami: AMIs were created:
-ap-southeast-1: ami-xxxxxxxxxxxxxxxxxx
+ap-southeast-1: ami-12345678910
 ```
 
 You can also find the newly built AMI into your AWS account.
@@ -319,7 +325,6 @@ In order to test this table, you can switch on and off instances to verify where
 If adding your own services and algorithm, you will need to change the EC2 metadata accordingly. The way to do it is to change the instance local block in the **`ec2.tf`** file in `modules/infra`. Each service is stated in there with its own tags, that will be loaded during the EC2 instance deployment and that will serve to the algorithm when EC2 metadata will be queried.
 You should only edit this block of configuration, the EC2s deployment is automated based on this local block, and so each instance stated in this list will be deployed.
 
-
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
@@ -327,4 +332,3 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
-

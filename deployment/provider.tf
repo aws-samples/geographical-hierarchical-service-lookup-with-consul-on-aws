@@ -7,7 +7,6 @@ data "aws_region" "current" {}
 provider "aws" {
   # Update desired region
   region                  = var.target_region
-  shared_credentials_file = "~/.aws/config"
   # Update account IDs
   allowed_account_ids = ["${var.target_account}"]
 }
