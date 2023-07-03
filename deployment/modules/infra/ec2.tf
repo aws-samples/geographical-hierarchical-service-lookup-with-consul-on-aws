@@ -190,9 +190,9 @@ resource "aws_s3_bucket_public_access_block" "files_public_access" {
 }
 
 resource "aws_s3_bucket_object" "service" {
-  key                    = "application.jar"
+  key                    = "efx-0.0.1-SNAPSHOT.jar"
   bucket                 = aws_s3_bucket.files_bucket.id
-  source                 = "application.jar"
+  source                 = "efx-0.0.1-SNAPSHOT.jar"
   kms_key_id             = aws_kms_key.s3_kms.arn
 }
 
