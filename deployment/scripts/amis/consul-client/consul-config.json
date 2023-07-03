@@ -1,0 +1,18 @@
+{
+  "license_path": "/opt/consul/config/consul-ent-license.hclic",
+  "acl": {
+    "enabled": true,
+    "default_policy": "allow",
+    "down_policy": "extend-cache",
+    "enable_token_persistence": true,
+    "tokens": {
+      "agent": "${agent_token}"
+    }
+  },
+  "connect": {
+    "enabled": true
+  },
+  "retry_join_wan": [
+    "provider=aws region=ap-southeast-1 tag_key=consul-federation-id tag_value=2"
+  ]
+}

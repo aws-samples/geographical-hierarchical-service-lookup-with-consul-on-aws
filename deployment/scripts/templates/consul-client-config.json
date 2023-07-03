@@ -1,0 +1,14 @@
+{
+   "bind_addr": "${privateIP}",
+   "data_dir": "/opt/consul/data",
+   "datacenter" :"${datacenter}",
+   "log_level": "INFO",
+   "retry_join": [
+      "provider=aws region=${region} tag_key=consul-cluster tag_value=${deployment_id}-${datacenter}"
+   ],
+   "node_name": "${node_name}",
+   "encrypt": "${gossip_encrypt_key}",
+   "leave_on_terminate": true,
+   "license_path": "/opt/consul/config/consul-ent-license.hclic"
+}
+
